@@ -13,17 +13,25 @@
 
   <div>
     <%= form.label :country, style: "display: block" %>
-    <%= form.text_field :country %>
+    <%= form.select :country, CS.countries.invert %>
   </div>
 
   <div>
     <%= form.label :state, style: "display: block" %>
-    <%= form.text_field :state %>
+    <% if address.country.present? %>
+      <%= form.select :state, CS.states(address.country).invert %>
+    <% else %>
+      <i>Please select a country first</i>
+    <% end %>
   </div>
 
   <div>
     <%= form.label :city, style: "display: block" %>
-    <%= form.text_field :city %>
+    <% if address.state.present? %>
+      <%= form.select :city, CS.cities(address.state, address.country) %>
+    <% else %>
+      <i>Please select a city first</i>
+    <% end %>
   </div>
 
   <div>

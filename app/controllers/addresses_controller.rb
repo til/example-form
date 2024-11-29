@@ -23,14 +23,18 @@ class AddressesController < ApplicationController
   def create
     @address = Address.new(address_params)
 
-    respond_to do |format|
-      if @address.save
-        format.html { redirect_to @address, notice: "Address was successfully created." }
-        format.json { render :show, status: :created, location: @address }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @address.errors, status: :unprocessable_entity }
+    if @address.country.present? && @address.state.present? && @address.city.present?
+      respond_to do |format|
+        if @address.save
+          format.html { redirect_to @address, notice: "Address was successfully created." }
+          format.json { render :show, status: :created, location: @address }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @address.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
