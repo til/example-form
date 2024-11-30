@@ -23,7 +23,9 @@ class AddressesController < ApplicationController
   def create
     @address = Address.new(address_params)
 
-    if @address.country.present? && @address.state.present? && @address.city.present?
+    if params[:refresh]
+      render :new, status: :unprocessable_entity
+    else
       respond_to do |format|
         if @address.save
           format.html { redirect_to @address, notice: "Address was successfully created." }
@@ -33,8 +35,6 @@ class AddressesController < ApplicationController
           format.json { render json: @address.errors, status: :unprocessable_entity }
         end
       end
-    else
-      render :new, status: :unprocessable_entity
     end
   end
 

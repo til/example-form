@@ -13,28 +13,29 @@
 
   <div>
     <%= form.label :country, style: "display: block" %>
-    <%= form.select :country, CS.countries.invert %>
+    <%= form.select :country, CS.countries.invert, include_blank: " " %>
   </div>
 
   <div>
     <%= form.label :state, style: "display: block" %>
     <% if address.country.present? %>
-      <%= form.select :state, CS.states(address.country).invert %>
+      <%= form.select :state, CS.states(address.country).invert, include_blank: " " %>
     <% else %>
-      <i>Please select a country first</i>
+      <p><i>Please select a country first</i></p>
     <% end %>
   </div>
 
   <div>
     <%= form.label :city, style: "display: block" %>
     <% if address.state.present? %>
-      <%= form.select :city, CS.cities(address.state, address.country) %>
+      <%= form.select :city, CS.cities(address.state, address.country), include_blank: " " %>
     <% else %>
-      <i>Please select a city first</i>
+      <p><i>Please select a state first</i></p>
     <% end %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit disabled: !address.complete? %>
+    <button type="submit" name="refresh" value="1">Refresh</button>
   </div>
 <% end %>
