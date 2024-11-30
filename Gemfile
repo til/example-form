@@ -63,5 +63,3 @@ group :test do
 end
 
 gem "city-state", "~> 1.1"
-
-gem "formtastic", "~> 5.0"

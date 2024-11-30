@@ -111,8 +111,6 @@ GEM
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
-    formtastic (5.0.0)
-      actionpack (>= 6.0.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -370,7 +368,6 @@ DEPENDENCIES
   capybara
   city-state (~> 1.1)
   debug
-  formtastic (~> 5.0)
   importmap-rails
   jbuilder
   kamal

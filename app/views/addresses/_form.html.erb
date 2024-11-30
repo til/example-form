@@ -1,10 +1,4 @@
-<style>
- .formtastic select {
-     width: 20rem;
- }
-</style>
-
-<%= semantic_form_for(address) do |form| %>
+<%= form_with(model: address) do |form| %>
   <% if address.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(address.errors.count, "error") %> prohibited this address from being saved:</h2>
@@ -18,15 +12,26 @@
   <% end %>
 
   <div>
-    <%= form.input :country, as: :select, collection: CS.countries.invert %>
+    <%= form.label :country, style: "display: block" %>
+    <%= form.select :country, CS.countries.invert %>
   </div>
 
   <div>
-    <%= form.input :state, as: :select, collection: CS.states(address.country).invert, input_html: { disabled: address.country.blank? } %>
+    <%= form.label :state, style: "display: block" %>
+    <% if address.country.present? %>
+      <%= form.select :state, CS.states(address.country).invert %>
+    <% else %>
+      <i>Please select a country first</i>
+    <% end %>
   </div>
 
   <div>
-    <%= form.input :city, as: :select, collection: CS.cities(address.state, address.country), input_html: { disabled: address.state.blank? } %>
+    <%= form.label :city, style: "display: block" %>
+    <% if address.state.present? %>
+      <%= form.select :city, CS.cities(address.state, address.country) %>
+    <% else %>
+      <i>Please select a city first</i>
+    <% end %>
   </div>
 
   <div>
