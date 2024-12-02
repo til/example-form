@@ -19,21 +19,17 @@ class AddressesController < ApplicationController
   def edit
   end
 
-  # POST /addresses or /addresses.json
+  # POST /addresses
   def create
     @address = Address.new(address_params)
 
     if params[:refresh_form]
       render :new
     else
-      respond_to do |format|
-        if @address.save
-          format.html { redirect_to @address, notice: "Address was successfully created." }
-          format.json { render :show, status: :created, location: @address }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @address.errors, status: :unprocessable_entity }
-        end
+      if @address.save
+        redirect_to @address, notice: "Address was successfully created."
+      else
+        render :new, status: :unprocessable_entity
       end
     end
   end
