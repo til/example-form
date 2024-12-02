@@ -24,7 +24,7 @@ class AddressesController < ApplicationController
     @address = Address.new(address_params)
 
     if params[:refresh_form]
-      render :new, status: :unprocessable_entity
+      render :new
     else
       respond_to do |format|
         if @address.save
