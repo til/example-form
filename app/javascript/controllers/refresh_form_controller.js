@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["button"]
+  static targets = ["form"]
 
   connect() {
     this.element.addEventListener("focusin", this.#setPermanent)
@@ -16,7 +16,8 @@ export default class extends Controller {
   }
 
   refresh(e) {
-    this.buttonTarget.click()
+    this.formTarget.action = this.formTarget.action + "?refresh_form=1"
+    this.formTarget.requestSubmit()
   }
 
   #setPermanent(e) {

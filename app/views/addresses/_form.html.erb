@@ -5,7 +5,7 @@
 </style>
 
 <%= turbo_frame_tag :refreshable_form, data: { controller: "refresh-form" } do %>
-  <%= form_with(model: address) do |form| %>
+  <%= form_with(model: address, html: { "data-refresh-form-target": "form" }) do |form| %>
     <p>
       Selected: <%= [address.country, address.state, address.city].compact_blank.join(", ") %>
     </p>
@@ -47,14 +47,6 @@
 
     <div>
       <%= form.submit disabled: !address.complete? %>
-      <button
-          type="submit"
-          name="refresh_form"
-          value="1"
-          class="secondary"
-          data-refresh-form-target="button"
-          data-turbo-frame="refreshable_form"
-      >Refresh form</button>
     </div>
   <% end %>
 <% end %>
