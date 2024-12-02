@@ -23,7 +23,7 @@ class AddressesController < ApplicationController
   def create
     @address = Address.new(address_params)
 
-    if params[:refresh]
+    if params[:refresh_form]
       render :new, status: :unprocessable_entity
     else
       respond_to do |format|

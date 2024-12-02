@@ -1,41 +1,61 @@
-<%= form_with(model: address) do |form| %>
-  <% if address.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(address.errors.count, "error") %> prohibited this address from being saved:</h2>
+<style>
+ button[name=refresh_form] {
+   display: none;
+ }
+</style>
 
-      <ul>
-        <% address.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= turbo_frame_tag :refreshable_form, data: { controller: "refresh-form" } do %>
+  <%= form_with(model: address) do |form| %>
+    <p>
+      Selected: <%= [address.country, address.state, address.city].compact_blank.join(", ") %>
+    </p>
+
+    <% if address.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(address.errors.count, "error") %> prohibited this address from being saved:</h2>
+
+        <ul>
+          <% address.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div id="country-input" class="input">
+      <%= form.label :country, style: "display: block" %>
+      <%= form.select :country, CS.countries.invert, { include_blank: " " }, { "data-action": "change->refresh-form#refresh" } %>
+    </div>
+
+    <div id="state-input" class="input">
+      <%= form.label :state, style: "display: block" %>
+      <% if address.country.present? %>
+        <%= form.select :state, CS.states(address.country).invert, { include_blank: " " }, { "data-action": "change->refresh-form#refresh" } %>
+      <% else %>
+        <p><i>Please select a country first</i></p>
+      <% end %>
+    </div>
+
+    <div id="city-input" class="input">
+      <%= form.label :city, style: "display: block" %>
+      <% if address.state.present? %>
+        <%= form.select :city, CS.cities(address.state, address.country), { include_blank: " " }, { "data-action": "change->refresh-form#refresh" } %>
+      <% else %>
+        <p><i>Please select a state first</i></p>
+      <% end %>
+    </div>
+
+    <div>
+      <%= form.submit disabled: !address.complete? %>
+      <button
+          type="submit"
+          name="refresh_form"
+          value="1"
+          class="secondary"
+          data-refresh-form-target="button"
+          data-turbo-frame="refreshable_form"
+          aria-busy="true"
+      >Refresh form</button>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :country, style: "display: block" %>
-    <%= form.select :country, CS.countries.invert, include_blank: " " %>
-  </div>
-
-  <div>
-    <%= form.label :state, style: "display: block" %>
-    <% if address.country.present? %>
-      <%= form.select :state, CS.states(address.country).invert, include_blank: " " %>
-    <% else %>
-      <p><i>Please select a country first</i></p>
-    <% end %>
-  </div>
-
-  <div>
-    <%= form.label :city, style: "display: block" %>
-    <% if address.state.present? %>
-      <%= form.select :city, CS.cities(address.state, address.country), include_blank: " " %>
-    <% else %>
-      <p><i>Please select a state first</i></p>
-    <% end %>
-  </div>
-
-  <div>
-    <%= form.submit disabled: !address.complete? %>
-    <button type="submit" name="refresh" value="1">Refresh</button>
-  </div>
 <% end %>
